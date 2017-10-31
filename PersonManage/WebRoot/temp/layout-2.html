@@ -1,0 +1,569 @@
+<div class="easyui-layout" data-options="fit:true">
+    <!-- Begin of toolbar -->
+    <div id="wu-toolbar-2">
+        <div class="wu-toolbar-button">
+            <a href="#" class="easyui-linkbutton" iconCls="icon-add" onclick="Add()" plain="true">添加</a>
+            <a href="#" class="easyui-linkbutton" iconCls="icon-edit" onclick="Edit()" plain="true">修改</a>
+            <a href="#" class="easyui-linkbutton" iconCls="icon-remove" onclick="remove()" plain="true">删除</a>
+            <a href="#" class="easyui-linkbutton" iconCls="icon-reload" onclick="refresh()" plain="true">刷新</a>
+        </div>
+        <div class="wu-toolbar-search">
+            <label>员工编号：</label><input id="emp_date" class="easyui-textbox" style="width:100px">
+            <label>姓名：</label><input id="emp_name" class="easyui-textbox" type="text" style="width:100px">
+            <label>部门：</label> 
+            <select id="emp_dept" class="easyui-combobox" panelHeight="auto" style="width:100px">
+                <option></option>
+                <option>财务部</option>
+                <option>人事部</option>
+                <option>后勤部</option>
+                <option>销售部</option>
+            </select>
+            <a id= "retrive_btn" href="#" class="easyui-linkbutton" iconCls="icon-search" >开始检索</a>
+        </div>
+    </div>
+    <!-- End of toolbar -->
+    <table id="wu-datagrid-2" class="easyui-datagrid" toolbar="#wu-toolbar-2"></table>
+</div>
+
+<!-- Begin of add-dialog -->
+<div id="wu-dialog-2" class="easyui-dialog" data-options="closed:true,iconCls:'icon-save'" style="width:500px; padding:10px;">
+	<form id="wu-form-2" method="post">
+        <table>
+            <tr>
+                <td width=auto align="right">员工编号:</td>
+                <td><input id="add_001" type="text" name="empid" class="easyui-textbox" /></td>
+                
+                <td align="right">姓 名:</td>
+                <td><input id="add_002" type="text" name="name" class="easyui-textbox" /></td>
+            </tr>
+            
+            <tr>
+                <td align="right">性 别:</td>
+                <td><input id="add_003" type="text" name="gender" class="easyui-textbox" /></td>
+                
+                <td align="right">职位:</td>
+                <td><input id="add_004" type="text" name="position" class="easyui-textbox" /></td>
+            </tr>
+            
+            <tr>
+                <td align="right">管理员:</td>
+                <td><input id="add_005" type="text" name="adm" class="easyui-textbox" /></td>
+                
+                <td align="right">学历:</td>
+                <td><input id="add_006" type="text" name="edubackground" class="easyui-textbox" /></td>
+            </tr>
+
+            <tr>
+                <td align="right">部门:</td>
+                <td><input id="add_007" type="text" name="department" class="easyui-textbox" /></td>
+                
+                <td align="right">生日:</td>
+                <td><input id="add_008" type="text" name="birthday" class="easyui-datebox" /></td>
+            </tr>
+
+            <tr>
+                <td align="right">籍贯:</td>
+                <td><input id="add_009" type="text" name="nativeplace" class="easyui-textbox" /></td>
+                
+                <td align="right">现住址:</td>
+                <td><input id="add_010" type="text" name="nowaddress" class="easyui-textbox" /></td>
+            </tr>
+
+            <tr>
+                <td align="right">身份证号:</td>
+                <td><input id="add_011" type="text" name="idcardno" class="easyui-textbox" /></td>
+                
+                <td align="right">民族:</td>
+                <td><input id="add_012" type="text" name="nation" class="easyui-textbox" /></td>
+            </tr>
+
+            <tr>
+                <td align="right">联系方式:</td>
+                <td><input id="add_013" type="text" name="contactway" class="easyui-textbox" /></td>
+                
+                <td align="right">工作时间:</td>
+                <td><input id="add_014" type="text" name="worktime" class="easyui-textbox" /></td>
+            </tr>
+
+            <tr>
+                <td align="right">毕业院校:</td>
+                <td><input id="add_015" type="text" name="graduateschool" class="easyui-textbox" /></td>
+                
+                <td align="right">专业:</td>
+                <td><input id="add_016" type="text" name="major" class="easyui-textbox" /></td>
+            </tr>
+
+        </table>
+    </form>
+</div>
+<!-- End of add-dialog -->
+
+
+<!-- Begin of edit-dialog -->
+<div id="wu-dialog-3" class="easyui-dialog" data-options="closed:true,iconCls:'icon-save'" style="width:500px; padding:10px;">
+	<form id="wu-form-3" method="post">
+        <table>
+            <tr>
+                <td width=auto align="right">员工编号:</td>
+                <td><input id="edit_001" type="text" name="empid" class="easyui-textbox" /></td>
+                
+                <td align="right">姓 名:</td>
+                <td><input id="edit_002" type="text" name="name" class="easyui-textbox" /></td>
+            </tr>
+            
+            <tr>
+                <td align="right">性 别:</td>
+                <td><input id="edit_003" type="text" name="gender" class="easyui-textbox" /></td>
+                
+                <td align="right">职位:</td>
+                <td><input id="edit_004" type="text" name="position" class="easyui-textbox" /></td>
+            </tr>
+            
+            <tr>
+                <td align="right">管理员:</td>
+                <td><input id="edit_005" type="text" name="adm" class="easyui-textbox" /></td>
+                
+                <td align="right">学历:</td>
+                <td><input id="edit_006" type="text" name="edubackground" class="easyui-textbox" /></td>
+            </tr>
+
+            <tr>
+                <td align="right">部门:</td>
+                <td><input id="edit_007" type="text" name="department" class="easyui-textbox" /></td>
+                
+                <td align="right">生日:</td>
+                <td><input id="edit_008" type="text" name="birthday" class="easyui-datebox" /></td>
+            </tr>
+
+            <tr>
+                <td align="right">籍贯:</td>
+                <td><input id="edit_009" type="text" name="nativeplace" class="easyui-textbox" /></td>
+                
+                <td align="right">现住址:</td>
+                <td><input id="edit_010" type="text" name="nowaddress" class="easyui-textbox" /></td>
+            </tr>
+
+            <tr>
+                <td align="right">身份证号:</td>
+                <td><input id="edit_011" type="text" name="idcardno" class="easyui-textbox" /></td>
+                
+                <td align="right">民族:</td>
+                <td><input id="edit_012" type="text" name="nation" class="easyui-textbox" /></td>
+            </tr>
+
+            <tr>
+                <td align="right">联系方式:</td>
+                <td><input id="edit_013" type="text" name="contactway" class="easyui-textbox" /></td>
+                
+                <td align="right">工作时间:</td>
+                <td><input id="edit_014" type="text" name="worktime" class="easyui-textbox" /></td>
+            </tr>
+
+            <tr>
+                <td align="right">毕业院校:</td>
+                <td><input id="edit_015" type="text" name="graduateschool" class="easyui-textbox" /></td>
+                
+                <td align="right">专业:</td>
+                <td><input id="edit_016" type="text" name="major" class="easyui-textbox" /></td>
+            </tr>
+        </table>
+    </form>
+</div>
+<!-- End of edit-dialog -->
+
+
+
+
+<script type="text/javascript">
+
+	/**
+	* 添加员工信息
+	*/
+	function add(){
+		/*$('#wu-form-2').form('submit', {
+			url:'http://localhost:8080/PersonManage/employee',
+			onSubmit: function(param){
+				param.op = 'A';
+				param.id = $('#add_001').val(),
+				param.name = $('#add_002').val(),
+				param.gender = $('#add_003').val(),
+				param.position = $('#add_004').val(),
+				param.adm = $('#add_005').val(),
+				param.edu = $('#add_006').val(),
+				param.dept = $('#add_007').val(),
+				param.birthday = $('#add_008').datebox('getValue'),
+				param.nativeplace = $('#add_009').val(),
+				param.nowaddress = $('#add_010').val(),
+				param.idcard = $('#add_011').val(),
+				param.nation = $('#add_012').val(),
+				param.contactway = $('#add_013').val(),
+				param.worktime = $('#add_014').val(),
+				param.school = $('#add_015').val(),
+				param.major = $('#add_016').val()
+    		},
+			success:function(data){
+				if(data){
+					$.messager.alert('信息提示','提交成功！','info');
+					$('#wu-dialog-2').dialog('close');
+					refresh();
+				}
+				else
+				{
+					$.messager.alert('信息提示','提交失败！','info');
+				}
+			}
+		});*/
+		
+		
+		var param = {
+			op :"A",
+			id :$('#add_001').val(),
+			name :$('#add_002').val(),
+			gender:$('#add_003').val(),
+			position:$('#add_004').val(),
+			adm:$('#add_005').val(),
+			edu:$('#add_006').val(),
+			dept:$('#add_007').val(),
+			birthday:$('#add_008').datebox('getValue'),
+			nativeplace:$('#add_009').val(),
+			nowaddress:$('#add_010').val(),
+			idcard:$('#add_011').val(),
+			nation:$('#add_012').val(),
+			contactway:$('#add_013').val(),
+			worktime:$('#add_014').val(),
+			school:$('#add_015').val(),
+			major:$('#add_016').val()		
+		};
+		
+		
+		var URL = "http://localhost:8080/PersonManage/employee";
+		LoadData(param,URL);
+		$.messager.alert('信息提示','提交成功！','info');
+		$('#wu-dialog-2').dialog('close');
+		
+		refresh();
+	}
+	
+	/**
+	* 修改记录
+	*/
+	function edit(){
+		/*$('#wu-form-3').form('submit', {
+			url:"http://localhost:8080/PersonManage/employee",
+			onSubmit: function(param){
+				param.op = 'E',
+				//param.flag = 'e',
+				param.id = $('#edit_001').val(),
+				param.name = $('#edit_002').val(),
+				param.gender = $('#edit_003').val(),
+				param.position = $('#edit_004').val(),
+				param.adm = $('#edit_005').val(),
+				param.edu = $('#edit_006').val(),
+				param.dept = $('#edit_007').val(),
+				param.birthday = $('#edit_008').datebox('getValue'),
+				param.nativeplace = $('#edit_009').val(),
+				param.nowaddress = $('#edit_010').val(),
+				param.idcard = $('#edit_011').val(),
+				param.nation = $('#edit_012').val(),
+				param.contactway = $('#edit_013').val(),
+				param.worktime = $('#edit_014').val(),
+				param.school = $('#edit_015').val(),
+				param.major = $('#edit_016').val()
+    		},
+			success:function(data){
+				if(data){
+					$.messager.alert('信息提示','修改成功！','info');
+					$('#wu-dialog-3').dialog('close');
+					refresh();
+				}
+				else
+				{
+					$.messager.alert('信息提示','修改失败！','info');
+				}
+			}
+		});*/
+		
+		
+		var param = {
+			op :"A",
+			flag:"e",
+			id :$('#edit_001').val(),
+			name :$('#edit_002').val(),
+			gender:$('#edit_003').val(),
+			position:$('#edit_004').val(),
+			adm:$('#edit_005').val(),
+			edu:$('#edit_006').val(),
+			dept:$('#edit_007').val(),
+			birthday:$('#edit_008').datebox('getValue'),
+			nativeplace:$('#edit_009').val(),
+			nowaddress:$('#edit_010').val(),
+			idcard:$('#edit_011').val(),
+			nation:$('#edit_012').val(),
+			contactway:$('#edit_013').val(),
+			worktime:$('#edit_014').val(),
+			school:$('#edit_015').val(),
+			major:$('#edit_016').val()		
+		};
+		
+		
+		var URL = "http://localhost:8080/PersonManage/employee";
+		LoadData(param,URL);
+		$.messager.alert('信息提示','提交成功！','info');
+		$('#wu-dialog-3').dialog('close');
+		
+		refresh();
+		
+		
+	}
+	
+	/**
+	* 删除员工信息(可选多条)
+	*/
+	function remove(){
+		if($('#wu-datagrid-2').datagrid('getSelections').length==0){
+				$.messager.alert('信息提示','请选择你要删除的信息！','info');
+				return;	
+		}
+	
+		$.messager.confirm('信息提示','确定要删除该记录？', function(result){
+			if(result){
+				var items = $('#wu-datagrid-2').datagrid('getSelections');
+				var ids = "";
+				
+				$(items).each(function(){	
+					ids += this.employeeid;
+					ids += " ";
+				});
+				
+				$.ajax({
+					url:"http://localhost:8080/PersonManage/employee",
+					type:"post",
+					data:{
+						id:ids,
+						op:"D"
+					},
+					success:function(data){
+						if(data){
+							$.messager.alert('信息提示','删除成功！','info');
+							refresh();		
+						}
+						else
+						{
+							$.messager.alert('信息提示','删除失败！','info');		
+						}
+					}	
+				});
+			}	
+		});
+	}
+	
+	
+	/**
+	* 打开添加窗口
+	*/
+	function Add(){
+		$('#wu-form-2').form('clear');
+		$('#wu-dialog-2').dialog({
+			closed: false,
+			modal:true,
+            title: "添加信息",
+            buttons: [{
+                text: '确定',
+                iconCls: 'icon-ok',
+                handler: add
+            }, {
+                text: '取消',
+                iconCls: 'icon-cancel',
+                handler: function () {
+                    $('#wu-dialog-2').dialog('close');                    
+                }
+            }]
+        });
+	}
+	
+	/**
+	* 打开修改窗口
+	*/
+	function Edit(){
+	
+		if($('#wu-datagrid-2').datagrid('getSelections').length>1||$('#wu-datagrid-2').datagrid('getSelections').length==0){
+			$.messager.alert('信息提示','请选择一条信息进行修改！','info');
+			return;	
+		}		
+		
+		$('#wu-form-3').form('clear');
+		var item = $('#wu-datagrid-2').datagrid('getSelected');
+		
+		
+		$('#edit_001').val(item.employeeid);
+		$('#edit_002').val(item.name);
+		$('#edit_003').val(item.gender);
+		$('#edit_004').val(item.position);
+		$('#edit_005').val(item.adm);
+		$('#edit_006').val(item.edubackground);
+		$('#edit_007').val(item.department);
+		$('#edit_008').datebox('setValue',item.birthday);
+		$('#edit_009').val(item.nativeplace);
+		$('#edit_010').val(item.nowaddress);
+		$('#edit_011').val(item.idcardno);
+		$('#edit_012').val(item.nation);
+		$('#edit_013').val(item.contactway);
+		$('#edit_014').val(item.worktime);
+		$('#edit_015').val(item.graduateschool);
+		$('#edit_016').val(item.major);
+
+		
+		$('#wu-dialog-3').dialog({
+			closed: false,
+			modal:true,
+            title: "修改信息",
+            buttons: [{
+                text: '确定',
+                iconCls: 'icon-ok',
+                handler: edit
+            }, {
+                text: '取消',
+                iconCls: 'icon-cancel',
+                handler: function () {
+                    $('#wu-dialog-3').dialog('close');                    
+                }
+            }]
+        });
+	}		
+	
+	//refresh函数，刷新数据，载入当前所有数据
+	function refresh(){
+		var param = {
+			op :"F"
+		};
+		var URL = "http://localhost:8080/PersonManage/employee";
+		LoadData(param,URL);	
+	}	
+	
+	
+	/**
+	* 载入满足条件的所有数据,其中param是向后端传递的参数，url是地址参数
+	*/
+	function LoadData(param,URL){
+	
+		$('#wu-datagrid-2').datagrid({
+			url:URL,
+			queryParams: param,
+			method:"post",
+			loadFilter:pagerFilter,		
+			rownumbers:true,
+			singleSelect:false,
+			pageSize:20,           
+			pagination:true,
+			multiSort:true,
+			fitColumns:true,
+			fit:true,
+			columns:[[
+				{ checkbox:true},
+				{ field:'employeeid',title:'员工编号',width:100,sortable:true},
+				{ field:'name',title:'姓名',width:100,sortable:true},
+				{ field:'gender',title:'性别',width:100},
+				{ field:'position',title:'职位',width:100},
+				{ field:'adm',title:'管理员',width:180},
+				{ field:'edubackground',title:'学历',width:100},
+				{ field:'department',title:'部门',width:100},
+				{ field:'birthday',title:'生日',width:100},
+				{ field:'nativeplace',title:'籍贯',width:100},
+				{ field:'nowaddress',title:'现住址',width:100},
+				{ field:'idcardno',title:'身份证号',width:100},
+				{ field:'nation',title:'民族',width:100},
+				{ field:'contactway',title:'联系方式',width:100},
+				{ field:'worktime',title:'工作时间',width:100,sortable:true},
+				{ field:'graduateschool',title:'毕业院校',width:100},
+				{ field:'major',title:'专业',width:100}
+			]]
+		});
+	}
+	
+	//打开页面时，加载数据表格，但是不加载数据
+	$('#wu-datagrid-2').datagrid({
+		url:null,
+		method:"post",
+		loadFilter:pagerFilter,		
+		rownumbers:true,
+		singleSelect:false,
+		pageSize:20,           
+		pagination:true,
+		multiSort:true,
+		fitColumns:true,
+		fit:true,
+		columns:[[
+			{ checkbox:true},
+			{ field:'employeeid',title:'员工编号',width:100,sortable:true},
+			{ field:'name',title:'姓名',width:100,sortable:true},
+			{ field:'gender',title:'性别',width:100},
+			{ field:'position',title:'职位',width:100},
+			{ field:'adm',title:'管理员',width:180},
+			{ field:'edubackground',title:'学历',width:100},
+			{ field:'department',title:'部门',width:100},
+			{ field:'birthday',title:'生日',width:100},
+			{ field:'nativeplace',title:'籍贯',width:100},
+			{ field:'nowaddress',title:'现住址',width:100},
+			{ field:'idcardno',title:'身份证号',width:100},
+			{ field:'nation',title:'民族',width:100},
+			{ field:'contactway',title:'联系方式',width:100},
+			{ field:'worktime',title:'工作时间',width:100,sortable:true},
+			{ field:'graduateschool',title:'毕业院校',width:100},
+			{ field:'major',title:'专业',width:100}
+		]]
+	});
+		
+		
+	//绑定检索按钮，获取当前选择的参数，向后台传递需要查询的参数
+	$(function(){
+	    $('#retrive_btn').bind('click', function(){
+	    
+			var ID = $('#emp_date').val();
+			var Name = $('#emp_name').val();
+			var Dept = $('#emp_dept').combobox('getText');
+			//alert(dept);
+			var URL = "http://localhost:8080/PersonManage/employee";
+			var param = {
+				op : "R",
+				id :ID,
+				name :Name,
+				dept :Dept,							
+			};
+			LoadData(param,URL);
+	    });
+	});
+
+
+
+	
+	/**
+	* 分页过滤器
+	*/
+	function pagerFilter(data){            
+		if (typeof data.length == 'number' && typeof data.splice == 'function'){// is array                
+			data = {                   
+				total: data.length,                   
+				rows: data               
+			}            
+		}        
+		var dg = $(this);         
+		var opts = dg.datagrid('options');          
+		var pager = dg.datagrid('getPager');          
+		pager.pagination({                
+			onSelectPage:function(pageNum, pageSize){                 
+				opts.pageNumber = pageNum;                   
+				opts.pageSize = pageSize;                
+				pager.pagination('refresh',{pageNumber:pageNum,pageSize:pageSize});                  
+				dg.datagrid('loadData',data);                
+			}          
+		});           
+		if (!data.originalRows){               
+			data.originalRows = (data.rows);       
+		}         
+		var start = (opts.pageNumber-1)*parseInt(opts.pageSize);          
+		var end = start + parseInt(opts.pageSize);        
+		data.rows = (data.originalRows.slice(start, end));         
+		return data;       
+	}
+	
+</script>

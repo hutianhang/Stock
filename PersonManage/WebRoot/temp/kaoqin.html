@@ -1,0 +1,275 @@
+<div class="easyui-layout" data-options="fit:true">
+    <!-- Begin of toolbar -->
+    <div id="wu-toolbar-record2">
+        <div class="wu-toolbar-button">
+            <!--<a href="#" class="easyui-linkbutton" iconCls="icon-add" onclick="Add()" plain="true">添加</a>-->
+            <!--<a href="#" class="easyui-linkbutton" iconCls="icon-edit" onclick="Edit()" plain="true">修改</a> -->
+            <a href="#" class="easyui-linkbutton" iconCls="icon-remove" onclick="remove()" plain="true">删除</a>
+            <a href="#" class="easyui-linkbutton" iconCls="icon-reload" onclick="refresh()" plain="true">刷新</a>
+        </div>
+        <div class="wu-toolbar-search">
+            <label>员工编号：</label><input id="rec_empid" class="easyui-textbox" style="width:100px">
+            <label>考勤日期：</label><input id="rec_date" class="easyui-datebox" type="text" style="width:100px">
+            <a id= "retrive_btn" href="#" class="easyui-linkbutton" iconCls="icon-search" >开始检索</a>
+        </div>
+    </div>
+    <!-- End of toolbar -->
+    <table id="wu-datagrid-record" class="easyui-datagrid" toolbar="#wu-toolbar-record2"></table>
+</div>
+
+<!-- Begin of add-dialog -->
+<div id="wu-dialog-record2" class="easyui-dialog" data-options="closed:true,iconCls:'icon-save'" style="width:600px; padding:10px;">
+	<form id="wu-form-record2" method="post">
+        <table>
+            <tr>
+                <td width="60" align="right">考勤编号:</td>
+                <td><input id="rec_add_001" type="text" name="recordid" class="easyui-textbox" /></td>
+                
+                <td align="right">员工编号:</td>
+                <td><input id="rec_add_002" type="text" name="employeeid" class="easyui-textbox" /></td>
+            </tr>
+            
+            <tr>
+                <td align="right">考勤日期:</td>
+                <td><input id="rec_add_003" type="text" name="recorddate" class="easyui-datebox" /></td>
+                
+                <td align="right">上班打卡时间:</td>
+                <td><input id="rec_add_004" type="text" name="begintime" class="easyui-textbox" /></td>
+            </tr>
+            
+            <tr>
+                <td align="right">下班打卡时间:</td>
+                <td><input id="rec_add_005" type="text" name="endtime" class="easyui-textbox" /></td>
+                
+            </tr>           
+
+        </table>
+    </form>
+</div>
+<!-- End of add-dialog -->
+
+
+
+<script type="text/javascript">
+
+	/**
+	* 添加考勤信息
+	*/
+	function add(){
+		/*$('#wu-form-record2').form('submit', {
+			url:"http://localhost:8080/PersonManage/record",
+			onSubmit: function(param){
+				param.op = 'A';
+    		},
+			success:function(data){
+				if(data){
+					$.messager.alert('信息提示','新增考勤信息成功！','info');
+					$('#wu-dialog-record2').dialog('close');
+					refresh();
+				}
+				else
+				{
+					$('#wu-dialog-record2').dialog('close');
+					$.messager.alert('信息提示','新增考勤信息失败！','info');
+					
+				}
+			}
+		});*/
+		
+		var param = {
+			op :"A",
+			recordid :$('#rec_add_001').val(),
+			employeeid :$('#rec_add_002').val(),
+			recorddate:$('#rec_add_003').datebox('getValue'),
+			begintime:$('#rec_add_004').val(),
+			endtime:$('#rec_add_005').val()		
+		};
+		
+		
+		var URL = "http://localhost:8080/PersonManage/record";
+		LoadData(param,URL);
+		$.messager.alert('信息提示','新增成功！','info');
+		$('#wu-dialog-record2').dialog('close');
+		
+		refresh();
+	}
+
+	
+	/**
+	* 删除考勤信息(可选多条)
+	*/
+	function remove(){
+		if($('#wu-datagrid-record').datagrid('getSelections').length==0){
+				$.messager.alert('信息提示','请选择你要删除的信息！','info');
+				return;	
+		}
+	
+		$.messager.confirm('信息提示','确定要删除该记录？', function(result){
+			if(result){
+				var items = $('#wu-datagrid-record').datagrid('getSelections');
+				var ids = "";
+				
+				$(items).each(function(){	
+					ids += this.recordid;
+					ids += " ";
+				});
+				
+				$.ajax({
+					url:"http://localhost:8080/PersonManage/record",
+					type:"post",
+					data:{
+						id:ids,
+						op:"D"
+					},
+					success:function(data){
+						if(data){
+							$.messager.alert('信息提示','删除成功！','info');
+							refresh();		
+						}
+						else
+						{
+							$.messager.alert('信息提示','删除失败！','info');		
+						}
+					}	
+				});
+			}	
+		});
+	}
+	
+	
+	/**
+	* 打开添加窗口
+	*/
+	function Add(){
+		$('#wu-form-record2').form('clear');
+		$('#wu-dialog-record2').dialog({
+			closed: false,
+			modal:true,
+            title: "添加信息(都为必填项)",
+            buttons: [{
+                text: '确定',
+                iconCls: 'icon-ok',
+                handler: add
+            }, {
+                text: '取消',
+                iconCls: 'icon-cancel',
+                handler: function () {
+                    $('#wu-dialog-record2').dialog('close');                    
+                }
+            }]
+        });
+	}
+			
+	
+	//refresh函数，刷新数据，载入当前所有数据
+	function refresh(){
+		var param = {
+			op :"F"
+		};
+		var URL = "http://localhost:8080/PersonManage/record";
+		LoadData(param,URL);	
+	}	
+	
+	
+	/**
+	* 载入满足条件的所有数据,其中param是向后端传递的参数，url是地址参数
+	*/
+	function LoadData(param,URL){
+	
+		$('#wu-datagrid-record').datagrid({
+			url:URL,
+			queryParams: param,
+			method:"post",
+			loadFilter:pagerFilter,		
+			rownumbers:true,
+			singleSelect:false,
+			pageSize:20,           
+			pagination:true,
+			multiSort:true,
+			fitColumns:true,
+			fit:true,
+			columns:[[
+				{ checkbox:true},
+				{ field:'recordid',title:'考勤编号',width:100,sortable:true},
+				{ field:'employeeid',title:'员工编号',width:100,sortable:true},
+				{ field:'recorddate',title:'考勤日期',width:100},
+				{ field:'begintime',title:'上班打卡时间',width:100},
+				{ field:'endtime',title:'下班打卡时间',width:180}
+			]]
+		});
+	}
+	
+	//打开页面时，加载数据表格，但是不加载数据
+	$('#wu-datagrid-record').datagrid({
+		url:null,
+		method:"post",
+		loadFilter:pagerFilter,		
+		rownumbers:true,
+		singleSelect:false,
+		pageSize:20,           
+		pagination:true,
+		multiSort:true,
+		fitColumns:true,
+		fit:true,
+		columns:[[
+			{ checkbox:true},
+			{ field:'recordid',title:'考勤编号',width:100,sortable:true},
+			{ field:'employeeid',title:'员工编号',width:100,sortable:true},
+			{ field:'recorddate',title:'考勤日期',width:100},
+			{ field:'begintime',title:'上班打卡时间',width:100},
+			{ field:'endtime',title:'下班打卡时间',width:180}
+		]]
+	});
+		
+		
+	//绑定检索按钮，获取当前选择的参数，向后台传递需要查询的参数
+	$(function(){
+	    $('#retrive_btn').bind('click', function(){
+	    
+			var ID = $('#rec_empid').val();
+			var Date = $('#rec_date').datebox('getValue');
+			
+			var URL = "http://localhost:8080/PersonManage/record";
+			var param = {
+				op : "R",
+				id :ID,
+				date :Date,							
+			};
+			LoadData(param,URL);
+	    });
+	});
+
+
+
+	
+	/**
+	* 分页过滤器
+	*/
+	function pagerFilter(data){            
+		if (typeof data.length == 'number' && typeof data.splice == 'function'){// is array                
+			data = {                   
+				total: data.length,                   
+				rows: data               
+			}            
+		}        
+		var dg = $(this);         
+		var opts = dg.datagrid('options');          
+		var pager = dg.datagrid('getPager');          
+		pager.pagination({                
+			onSelectPage:function(pageNum, pageSize){                 
+				opts.pageNumber = pageNum;                   
+				opts.pageSize = pageSize;                
+				pager.pagination('refresh',{pageNumber:pageNum,pageSize:pageSize});                  
+				dg.datagrid('loadData',data);                
+			}          
+		});           
+		if (!data.originalRows){               
+			data.originalRows = (data.rows);       
+		}         
+		var start = (opts.pageNumber-1)*parseInt(opts.pageSize);          
+		var end = start + parseInt(opts.pageSize);        
+		data.rows = (data.originalRows.slice(start, end));         
+		return data;       
+	}
+	
+</script>
